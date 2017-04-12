@@ -13,7 +13,7 @@ public class FormDataBuku extends javax.swing.JFrame {
         initComponents();
     }
     
-    private void initTable(){
+    private void InitTable(){
         model = new DefaultTableModel();
         model.addColumn("JUDUL");
         model.addColumn("PENULIS");
@@ -52,7 +52,21 @@ private void TambahData (String judul,String penulis,String harga){
         }
     }    
     
-
+private boolean validasi(String Judul,String Penulis){
+ try{
+     stt=con.createStatement();
+     String sql = "Select *from buku where judul='"+Judul+"' and penulis='"+Penulis+"';";
+     rss=stt.executeQuery(sql);
+        if(rss.next())
+            return true;
+        else
+            return false;
+ } 
+ catch(SQLException e) {
+     System.out.printf(e.getMessage());
+     return false;
+ }
+}
         @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -295,7 +309,7 @@ private void TambahData (String judul,String penulis,String harga){
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // TODO add your handling code here:
-        initTable();
+        InitTable();
         TampilData();
     }//GEN-LAST:event_formComponentShown
 
@@ -330,9 +344,15 @@ private void TambahData (String judul,String penulis,String harga){
         String judul = judul2.getText();
         String penulis = penulis2.getSelectedItem().toString();
         String harga = harga2.getText();
+       if (validasi(judul,penulis)){
+                JOptionPane.showMessageDialog(null, "Data Sudah Ada");
+            }
+            else{
         TambahData(judul,penulis,harga);
-//        initTable();
-//        TampilData();
+        InitTable();
+        TampilData();
+        JOptionPane.showMessageDialog(null, "Berhasil Simpan Data");
+       }
     }//GEN-LAST:event_simpanActionPerformed
 
     private void cariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cariKeyPressed
